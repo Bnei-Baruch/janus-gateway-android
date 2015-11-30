@@ -119,7 +119,7 @@ public class JanusServer implements Runnable, IJanusMessageObserver, IJanusSessi
                 thisThread.sleep(25000);
             } catch (InterruptedException ex) {
             }
-            if (!connected || serverConnection.getMessengerType() != JanusMessengerType.websocket)
+            if (!connected )//|| serverConnection.getMessengerType() != JanusMessengerType.websocket
                 return;
             JSONObject obj = new JSONObject();
             try {
@@ -288,6 +288,8 @@ public class JanusServer implements Runnable, IJanusMessageObserver, IJanusSessi
                             cb.reportSuccess(obj);
                             transactions.remove(transaction);
                         }
+                        serverConnection.longPoll();
+
                     }
                     break;
                 }

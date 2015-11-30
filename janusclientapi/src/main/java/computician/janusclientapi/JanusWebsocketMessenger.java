@@ -146,4 +146,7 @@ public class JanusWebsocketMessenger implements IJanusMessenger {
             handler.onError(ex);
         }
     }
+    public void longPoll()
+    {
+    }
 }
