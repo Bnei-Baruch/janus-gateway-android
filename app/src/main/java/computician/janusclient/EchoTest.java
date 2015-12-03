@@ -1,8 +1,10 @@
 package computician.janusclient;
 
+import android.app.Application;
 import android.content.Context;
 import android.opengl.EGLContext;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 import org.webrtc.MediaStream;
@@ -30,7 +32,8 @@ import computician.janusclientapi.PluginHandleSendMessageCallbacks;
 
 public class EchoTest {
 
-    private final String JANUS_URI = "ws://192.168.1.197:8188";
+    private final String JANUS_URI = "http://itgb.net:8088/janus";
+    //private final String JANUS_URI = "http://188.165.249.44:8088/janus";
     private JanusPluginHandle handle = null;
     private final VideoRenderer.Callbacks localRender, remoteRender;
     private final JanusServer janusServer;
@@ -53,9 +56,9 @@ public class EchoTest {
 
         @Override
         public List<PeerConnection.IceServer> getIceServers() {
-            //ArrayList<PeerConnection.IceServer> iceServers =
-            //iceServers.add(new PeerConnection.IceServer("stun:stun.l.google.com:19302"));
-            return new ArrayList<PeerConnection.IceServer>();
+            ArrayList<PeerConnection.IceServer> iceServers = new ArrayList<PeerConnection.IceServer>();
+            iceServers.add(new PeerConnection.IceServer("stun:v4g.kbb1.com:3478"));
+            return  iceServers;
         }
 
         @Override
@@ -71,6 +74,7 @@ public class EchoTest {
         @Override
         public void onCallbackError(String error) {
 
+            //Show error message to user
         }
     }
 
@@ -82,52 +86,72 @@ public class EchoTest {
 
                 JSONObject msg = new JSONObject();
                 JSONObject obj = new JSONObject();
+            JSONObject msg1 = new JSONObject();
+            JSONObject obj1 = new JSONObject();
                 try {
-                    obj.put("audio", true);
-                    obj.put("video", true);
+
+                    obj.put("request", "watch");
+                    obj.put("id", 1);
                     msg.put("message", obj);
                     handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
+
+//                    obj1.put("request", "watch");
+//                    obj1.put("id", 1);
+//                    msg1.put("message", obj1);
+//                    handle.sendMessage(new PluginHandleSendMessageCallbacks(msg1));
                 } catch (Exception ex) {
 
                 }
 
-            handle.createOffer(new IPluginHandleWebRTCCallbacks() {
-                @Override
-                public JSONObject getJsep() {
-                    return null;
-                }
-
-                @Override
-                public void onCallbackError(String error) {
-
-                }
-
-                @Override
-                public Boolean getTrickle() {
-                    return true;
-                }
-
-                @Override
-                public JanusMediaConstraints getMedia() {
-                    return new JanusMediaConstraints();
-                }
-
-                @Override
-                public void onSuccess(JSONObject obj) {
-                    Log.d("JANUSCLIENT", "OnSuccess for CreateOffer called");
-                    try {
-                        JSONObject body = new JSONObject();
-                        JSONObject msg = new JSONObject();
-                        body.put("audio", true);
-                        body.put("video", true);
-                        msg.put("message", body);
-                        msg.put("jsep", obj);
-                        handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
-                    } catch (Exception ex) {
-
-                    }
-                }
-            });
+//            handle.createOffer(new IPluginHandleWebRTCCallbacks() {
+//                @Override
+//                public JSONObject getJsep() {
+//                    return null;
+//                }
+//
+//                @Override
+//                public void onCallbackError(String error) {
+//
+//                }
+//
+//                @Override
+//                public Boolean getTrickle() {
+//                    return true;
+//                }
+//
+//                @Override
+//                public JanusMediaConstraints getMedia() {
+//                    JanusMediaConstraints t =     new JanusMediaConstraints();
+//                    t.setSendAudio(false);
+//
+//                    return t;
+//                }
+//
+//                @Override
+//                public void onSuccess(JSONObject obj) {
+//                    Log.d("JANUSCLIENT", "OnSuccess for CreateOffer called");
+//                    try {
+//                        JSONObject body = new JSONObject();
+//                        JSONObject msg = new JSONObject();
+//                        body.put("request", "watch");
+//
+//                        body.put("id", 1);
+//                        msg.put("message", body);
+//                        msg.put("jsep", obj);
+//                        handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
+//                        JSONObject body1 = new JSONObject();
+//                        JSONObject msg1 = new JSONObject();
+//                        body1.put("request", "watch");
+//                        body1.put("id", 2);
+//                        msg1.put("message", body1);
+//                        msg1.put("jsep", obj);
+//                        handle.sendMessage(new PluginHandleSendMessageCallbacks(msg1));
+//
+//                    } catch (Exception ex) {
+//
+//                    }
+//                }
+//            });
 
         }
 
@@ -135,21 +159,35 @@ public class EchoTest {
         public void onMessage(JSONObject msg, final JSONObject jsepLocal) {
             if(jsepLocal != null)
             {
-                handle.handleRemoteJsep(new IPluginHandleWebRTCCallbacks() {
-                    final JSONObject myJsep = jsepLocal;
+
+                handle.createAnswer(new IPluginHandleWebRTCCallbacks() {
+
                     @Override
                     public void onSuccess(JSONObject obj) {
+                        try {
+                            JSONObject body = new JSONObject();
+                            JSONObject msg = new JSONObject();
+                            body.put("request", "start");
 
+                            msg.put("message", body);
+                            msg.put("jsep", obj);
+                            handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
+                        } catch (Exception e) {
+
+                        }
                     }
+
 
                     @Override
                     public JSONObject getJsep() {
-                        return myJsep;
+                        return null;
                     }
 
                     @Override
                     public JanusMediaConstraints getMedia() {
-                        return null;
+                        JanusMediaConstraints m = new JanusMediaConstraints();
+                        m.setSendAudio(true);
+                        return m;
                     }
 
                     @Override
@@ -161,14 +199,43 @@ public class EchoTest {
                     public void onCallbackError(String error) {
 
                     }
+
                 });
+//                handle.handleRemoteJsep(new IPluginHandleWebRTCCallbacks() {
+//                    final JSONObject myJsep = jsepLocal;
+//                    @Override
+//                    public void onSuccess(JSONObject obj) {
+//
+//                    }
+//
+//                    @Override
+//                    public JSONObject getJsep() {
+//                        return myJsep;
+//                    }
+//
+//                    @Override
+//                    public JanusMediaConstraints getMedia() {
+//
+//                        return null;
+//                    }
+//
+//                    @Override
+//                    public Boolean getTrickle() {
+//                        return null;
+//                    }
+//
+//                    @Override
+//                    public void onCallbackError(String error) {
+//
+//                    }
+//                });
             }
         }
 
         @Override
         public void onLocalStream(MediaStream stream) {
-            stream.videoTracks.get(0).addRenderer(new VideoRenderer(localRender));
-            VideoRendererGui.update(localRender, 0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
+           // stream.videoTracks.get(0).addRenderer(new VideoRenderer(localRender));
+           // VideoRendererGui.update(localRender, 0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
         }
 
         @Override
@@ -178,7 +245,7 @@ public class EchoTest {
                 Log.d("JANUSCLIENT", "video tracks enabled");
             stream.videoTracks.get(0).addRenderer(new VideoRenderer(remoteRender));
             VideoRendererGui.update(remoteRender, 0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, true);
-            VideoRendererGui.update(localRender, 72, 72, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
+           // VideoRendererGui.update(localRender, 72, 72, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
         }
 
         @Override
@@ -198,7 +265,7 @@ public class EchoTest {
 
         @Override
         public JanusSupportedPluginPackages getPlugin() {
-            return JanusSupportedPluginPackages.JANUS_ECHO_TEST;
+            return JanusSupportedPluginPackages.JANUS_STREAMING;
         }
 
         @Override
