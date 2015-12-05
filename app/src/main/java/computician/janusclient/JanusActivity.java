@@ -21,6 +21,7 @@ public class JanusActivity extends Activity {
     private VideoRenderer.Callbacks localRender;
     private VideoRenderer.Callbacks remoteRender;
     private EchoTest echoTest;
+    private StreamBB stream;
     private VideoRoomTest videoRoomTest;
 
     /**
@@ -60,9 +61,13 @@ public class JanusActivity extends Activity {
             videoRoomTest.initializeMediaContext(this, true, true, true, con);
             videoRoomTest.Start();
             */
-            echoTest = new EchoTest(localRender, remoteRender);
-            echoTest.initializeMediaContext(this, true, true, true, con);
-            echoTest.Start();
+//            echoTest = new EchoTest(localRender, remoteRender);
+//            echoTest.initializeMediaContext(this, true, true, true, con);
+//            echoTest.Start();
+
+            stream = new StreamBB(remoteRender);
+            stream.initializeMediaContext(this, true, true, true, con);
+            stream.Start();
 
         } catch (Exception ex) {
             Log.e("computician.janusclient", ex.getMessage());

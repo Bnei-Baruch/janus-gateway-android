@@ -33,7 +33,8 @@ public class JanusRestMessenger implements IJanusMessenger {
         if(resturi.isEmpty())
             resturi = uri;
 
-        AsyncHttpGet get = new AsyncHttpGet(uri+"/"+session_id.toString());
+
+        AsyncHttpGet get = new AsyncHttpGet(uri+"/"+session_id.toString()+"&maxev=1");
 
         AsyncHttpClient.getDefaultInstance().executeJSONObject(get, new AsyncHttpClient.JSONObjectCallback() {
             @Override

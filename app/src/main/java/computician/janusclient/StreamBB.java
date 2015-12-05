@@ -1,10 +1,8 @@
 package computician.janusclient;
 
-import android.app.Application;
 import android.content.Context;
 import android.opengl.EGLContext;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONObject;
 import org.webrtc.MediaStream;
@@ -25,25 +23,28 @@ import computician.janusclientapi.JanusSupportedPluginPackages;
 import computician.janusclientapi.PluginHandleSendMessageCallbacks;
 
 /**
- * Created by ben.trent on 7/24/2015.
+ * Created by igal on 12/5/15.
  */
+public class StreamBB {
 
-//TODO create message classes unique to this plugin
+  //  private final String JANUS_URI = "http://itgb.net:8088/janus";
+    private final String JANUS_URI = " http://v4g.kbb1.com:8088/janus";
 
-public class EchoTest {
-
-    private final String JANUS_URI = "http://itgb.net:8088/janus";
     //private final String JANUS_URI = "http://188.165.249.44:8088/janus";
     private JanusPluginHandle handle = null;
-    private final VideoRenderer.Callbacks localRender, remoteRender;
+    private final VideoRenderer.Callbacks  remoteRender;
     private final JanusServer janusServer;
+
 
 
     public class JanusGlobalCallbacks implements IJanusGatewayCallbacks {
 
+
         @Override
         public void onSuccess() {
             janusServer.Attach(new JanusPluginCallbacks());
+            //janusServer.Attach(new JanusPluginCallbacks(1));
+           // janusServer.Attach(new JanusPluginCallbacks(2));
         }
 
         @Override
@@ -79,81 +80,31 @@ public class EchoTest {
         }
     }
 
-    public class JanusPluginCallbacks implements IJanusPluginCallbacks {
 
+    public class JanusPluginCallbacks implements IJanusPluginCallbacks {
+        int streamId;
+//        public JanusPluginCallbacks(int id) {
+//             streamId = id;
+//        }
         @Override
         public void success(JanusPluginHandle pluginHandle) {
 
-            EchoTest.this.handle = pluginHandle;
+            StreamBB.this.handle = pluginHandle;
 
-                JSONObject msg = new JSONObject();
-                JSONObject obj = new JSONObject();
+            JSONObject msg = new JSONObject();
+            JSONObject obj = new JSONObject();
             JSONObject msg1 = new JSONObject();
             JSONObject obj1 = new JSONObject();
-                try {
+            try {
 
-                    obj.put("request", "watch");
-                    obj.put("id", 2);
-                    msg.put("message", obj);
-                    handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
+                obj.put("request", "watch");
+                obj.put("id", 1);
+                msg.put("message", obj);
+                handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
 
-//                    obj1.put("request", "watch");
-//                    obj1.put("id", 1);
-//                    msg1.put("message", obj1);
-//                    handle.sendMessage(new PluginHandleSendMessageCallbacks(msg1));
-                } catch (Exception ex) {
-
-                }
-
-//            handle.createOffer(new IPluginHandleWebRTCCallbacks() {
-//                @Override
-//                public JSONObject getJsep() {
-//                    return null;
-//                }
-//
-//                @Override
-//                public void onCallbackError(String error) {
-//
-//                }
-//
-//                @Override
-//                public Boolean getTrickle() {
-//                    return true;
-//                }
-//
-//                @Override
-//                public JanusMediaConstraints getMedia() {
-//                    JanusMediaConstraints t =     new JanusMediaConstraints();
-//                    t.setSendAudio(false);
-//
-//                    return t;
-//                }
-//
-//                @Override
-//                public void onSuccess(JSONObject obj) {
-//                    Log.d("JANUSCLIENT", "OnSuccess for CreateOffer called");
-//                    try {
-//                        JSONObject body = new JSONObject();
-//                        JSONObject msg = new JSONObject();
-//                        body.put("request", "watch");
-//
-//                        body.put("id", 1);
-//                        msg.put("message", body);
-//                        msg.put("jsep", obj);
-//                        handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
-//                        JSONObject body1 = new JSONObject();
-//                        JSONObject msg1 = new JSONObject();
-//                        body1.put("request", "watch");
-//                        body1.put("id", 2);
-//                        msg1.put("message", body1);
-//                        msg1.put("jsep", obj);
-//                        handle.sendMessage(new PluginHandleSendMessageCallbacks(msg1));
-//
-//                    } catch (Exception ex) {
-//
-//                    }
-//                }
-//            });
+            }
+            catch (Exception e) {
+            }
 
         }
 
@@ -205,52 +156,34 @@ public class EchoTest {
                     }
 
                 });
-//                handle.handleRemoteJsep(new IPluginHandleWebRTCCallbacks() {
-//                    final JSONObject myJsep = jsepLocal;
-//                    @Override
-//                    public void onSuccess(JSONObject obj) {
 //
-//                    }
-//
-//                    @Override
-//                    public JSONObject getJsep() {
-//                        return myJsep;
-//                    }
-//
-//                    @Override
-//                    public JanusMediaConstraints getMedia() {
-//
-//                        return null;
-//                    }
-//
-//                    @Override
-//                    public Boolean getTrickle() {
-//                        return null;
-//                    }
-//
-//                    @Override
-//                    public void onCallbackError(String error) {
-//
-//                    }
-//                });
             }
 
         }
 
         @Override
         public void onLocalStream(MediaStream stream) {
-           // stream.videoTracks.get(0).addRenderer(new VideoRenderer(localRender));
-           // VideoRendererGui.update(localRender, 0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
+            // stream.videoTracks.get(0).addRenderer(new VideoRenderer(localRender));
+            // VideoRendererGui.update(localRender, 0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
         }
 
         @Override
         public void onRemoteStream(MediaStream stream) {
-            stream.videoTracks.get(0).setEnabled(true);
-            if(stream.videoTracks.get(0).enabled())
-                Log.d("JANUSCLIENT", "video tracks enabled");
-            stream.videoTracks.get(0).addRenderer(new VideoRenderer(remoteRender));
-            VideoRendererGui.update(remoteRender, 0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, true);
-           // VideoRendererGui.update(localRender, 72, 72, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
+            if(stream.videoTracks.size()>0) {
+                stream.videoTracks.get(0).setEnabled(true);
+                if (stream.videoTracks.get(0).enabled()) {
+                    Log.d("JANUSCLIENT", "video tracks enabled");
+                    stream.videoTracks.get(0).addRenderer(new VideoRenderer(remoteRender));
+                    VideoRendererGui.update(remoteRender, 0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, true);
+                    // VideoRendererGui.update(localRender, 72, 72, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
+                }
+            }
+//            stream.audioTracks.get(0).setEnabled(true);
+//            if(stream.audioTracks.get(0).enabled())
+//            {
+//
+//            }
+
         }
 
         @Override
@@ -285,8 +218,8 @@ public class EchoTest {
 
     }
 
-    public EchoTest(VideoRenderer.Callbacks localRender, VideoRenderer.Callbacks remoteRender) {
-        this.localRender = localRender;
+    public StreamBB( VideoRenderer.Callbacks remoteRender) {
+
         this.remoteRender = remoteRender;
         janusServer = new JanusServer(new JanusGlobalCallbacks());
     }
@@ -299,3 +232,5 @@ public class EchoTest {
         janusServer.Connect();
     }
 }
+
+

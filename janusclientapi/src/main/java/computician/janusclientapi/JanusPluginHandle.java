@@ -350,6 +350,7 @@ public class JanusPluginHandle {
             pc_cons.mandatory.add(new MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"));
         }
         if (callbacks.getMedia().getRecvVideo()) {
+            pc_cons.mandatory.add(new MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"));
             Log.d("VIDEO_ROOM", "Receiving video");
         }
         if (isOffer) {
