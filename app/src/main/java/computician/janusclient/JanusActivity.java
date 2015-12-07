@@ -1,7 +1,6 @@
 package computician.janusclient;
 
 import computician.janusclient.util.SystemUiHider;
-import computician.janusclientapi.*;
 
 import android.app.Activity;
 import android.opengl.EGLContext;
@@ -19,9 +18,11 @@ public class JanusActivity extends Activity {
 
     private GLSurfaceView vsv;
     private VideoRenderer.Callbacks localRender;
-    private VideoRenderer.Callbacks remoteRender;
+    private VideoRenderer.Callbacks remoteRender1;
+    private VideoRenderer.Callbacks remoteRender2;
     private EchoTest echoTest;
-    private StreamBB stream;
+    private StreamBBVideo stream;
+    private StreamBBAudio streamAudio;
     private VideoRoomTest videoRoomTest;
 
     /**
@@ -65,9 +66,13 @@ public class JanusActivity extends Activity {
 //            echoTest.initializeMediaContext(this, true, true, true, con);
 //            echoTest.Start();
 
-            stream = new StreamBB(remoteRender);
+            stream = new StreamBBVideo(remoteRender1);
             stream.initializeMediaContext(this, true, true, true, con);
             stream.Start();
+
+            streamAudio = new StreamBBAudio(remoteRender2);
+            streamAudio.initializeMediaContext(this, true, true, true, con);
+            streamAudio.Start();
 
         } catch (Exception ex) {
             Log.e("computician.janusclient", ex.getMessage());
@@ -89,7 +94,8 @@ public class JanusActivity extends Activity {
         vsv.setKeepScreenOn(true);
         VideoRendererGui.setView(vsv, new MyInit());
 
-        localRender = VideoRendererGui.create(72, 72, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
-        remoteRender = VideoRendererGui.create(0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, true);
+       // localRender = VideoRendererGui.create(72, 72, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
+        remoteRender1 = VideoRendererGui.create(0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
+        remoteRender2 = VideoRendererGui.create(0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
     }
 }

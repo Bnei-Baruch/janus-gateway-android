@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/bb-janus-gateway-android.iml" filepath="$PROJECT_DIR$/bb-janus-gateway-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/janus-gateway-android.iml" filepath="$PROJECT_DIR$/janus-gateway-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/janusclientapi/janusclientapi.iml" filepath="$PROJECT_DIR$/janusclientapi/janusclientapi.iml" />
     </modules>
   </component>

@@ -25,10 +25,10 @@ import computician.janusclientapi.PluginHandleSendMessageCallbacks;
 /**
  * Created by igal on 12/5/15.
  */
-public class StreamBB {
+public class StreamBBVideo {
 
-  //  private final String JANUS_URI = "http://itgb.net:8088/janus";
-    private final String JANUS_URI = " http://v4g.kbb1.com:8088/janus";
+  private final String JANUS_URI = "http://itgb.net:8088/janus";
+    //private final String JANUS_URI = " http://v4g.kbb1.com:8088/janus";
 
     //private final String JANUS_URI = "http://188.165.249.44:8088/janus";
     private JanusPluginHandle handle = null;
@@ -42,7 +42,8 @@ public class StreamBB {
 
         @Override
         public void onSuccess() {
-            janusServer.Attach(new JanusPluginCallbacks());
+          //  janusServer.Attach(new JanusPluginCallbacksAudio());
+          janusServer.Attach(new JanusPluginCallbacksVideo());
             //janusServer.Attach(new JanusPluginCallbacks(1));
            // janusServer.Attach(new JanusPluginCallbacks(2));
         }
@@ -81,7 +82,7 @@ public class StreamBB {
     }
 
 
-    public class JanusPluginCallbacks implements IJanusPluginCallbacks {
+    public class JanusPluginCallbacksAudio implements IJanusPluginCallbacks {
         int streamId;
 //        public JanusPluginCallbacks(int id) {
 //             streamId = id;
@@ -89,7 +90,145 @@ public class StreamBB {
         @Override
         public void success(JanusPluginHandle pluginHandle) {
 
-            StreamBB.this.handle = pluginHandle;
+            StreamBBVideo.this.handle = pluginHandle;
+
+            JSONObject msg = new JSONObject();
+            JSONObject obj = new JSONObject();
+            JSONObject msg1 = new JSONObject();
+            JSONObject obj1 = new JSONObject();
+            try {
+
+                obj.put("request", "watch");
+                obj.put("id", 2);
+                msg.put("message", obj);
+                handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
+
+            }
+            catch (Exception e) {
+            }
+
+        }
+
+        @Override
+        public void onMessage(JSONObject msg, final JSONObject jsepLocal) {
+            if(jsepLocal != null)
+            {
+
+                handle.createAnswer(new IPluginHandleWebRTCCallbacks() {
+
+                    @Override
+                    public void onSuccess(JSONObject obj) {
+                        try {
+                            JSONObject body = new JSONObject();
+                            JSONObject msg = new JSONObject();
+                            body.put("request", "start");
+
+                            msg.put("message", body);
+                            msg.put("jsep", obj);
+                            handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
+                        } catch (Exception e) {
+
+                        }
+                    }
+
+
+                    @Override
+                    public JSONObject getJsep() {
+                        return jsepLocal;
+                    }
+
+                    @Override
+                    public JanusMediaConstraints getMedia() {
+                        JanusMediaConstraints m = new JanusMediaConstraints();
+                        m.setSendAudio(false);
+                        m.setRecvVideo(true);
+                        m.setRecvAudio(true);
+                        return m;
+                    }
+
+                    @Override
+                    public Boolean getTrickle() {
+                        return true;
+                    }
+
+                    @Override
+                    public void onCallbackError(String error) {
+
+                    }
+
+                });
+//
+            }
+
+        }
+
+        @Override
+        public void onLocalStream(MediaStream stream) {
+            // stream.videoTracks.get(0).addRenderer(new VideoRenderer(localRender));
+            // VideoRendererGui.update(localRender, 0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
+        }
+
+        @Override
+        public void onRemoteStream(MediaStream stream) {
+            if(stream.videoTracks.size()>0) {
+                stream.videoTracks.get(0).setEnabled(true);
+                if (stream.videoTracks.get(0).enabled()) {
+                    Log.d("JANUSCLIENT", "video tracks enabled");
+                    stream.videoTracks.get(0).addRenderer(new VideoRenderer(remoteRender));
+                    VideoRendererGui.update(remoteRender, 0, 0, 25, 50, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
+                    // VideoRendererGui.update(localRender, 72, 72, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
+                }
+            }
+//            stream.audioTracks.get(0).setEnabled(true);
+//            if(stream.audioTracks.get(0).enabled())
+//            {
+//
+//            }
+
+        }
+
+        @Override
+        public void onDataOpen(Object data) {
+
+        }
+
+        @Override
+        public void onData(Object data) {
+
+        }
+
+        @Override
+        public void onCleanup() {
+
+        }
+
+        @Override
+        public JanusSupportedPluginPackages getPlugin() {
+            return JanusSupportedPluginPackages.JANUS_STREAMING;
+        }
+
+        @Override
+        public void onCallbackError(String error) {
+
+        }
+
+        @Override
+        public void onDetached() {
+
+        }
+
+    }
+
+
+    public class JanusPluginCallbacksVideo implements IJanusPluginCallbacks {
+        int streamId;
+        //        public JanusPluginCallbacks(int id) {
+//             streamId = id;
+//        }
+        @Override
+        public void success(JanusPluginHandle pluginHandle) {
+
+            StreamBBVideo.this.handle = pluginHandle;
 
             JSONObject msg = new JSONObject();
             JSONObject obj = new JSONObject();
@@ -174,7 +313,7 @@ public class StreamBB {
                 if (stream.videoTracks.get(0).enabled()) {
                     Log.d("JANUSCLIENT", "video tracks enabled");
                     stream.videoTracks.get(0).addRenderer(new VideoRenderer(remoteRender));
-                    VideoRendererGui.update(remoteRender, 0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, true);
+                    VideoRendererGui.update(remoteRender, 0, 0, 25, 50, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
                     // VideoRendererGui.update(localRender, 72, 72, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
                 }
             }
@@ -218,7 +357,7 @@ public class StreamBB {
 
     }
 
-    public StreamBB( VideoRenderer.Callbacks remoteRender) {
+    public StreamBBVideo(VideoRenderer.Callbacks remoteRender) {
 
         this.remoteRender = remoteRender;
         janusServer = new JanusServer(new JanusGlobalCallbacks());
