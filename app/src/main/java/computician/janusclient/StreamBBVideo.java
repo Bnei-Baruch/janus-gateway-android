@@ -313,7 +313,7 @@ public class StreamBBVideo {
                 if (stream.videoTracks.get(0).enabled()) {
                     Log.d("JANUSCLIENT", "video tracks enabled");
                     stream.videoTracks.get(0).addRenderer(new VideoRenderer(remoteRender));
-                    VideoRendererGui.update(remoteRender, 0, 0, 25, 50, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
+                    VideoRendererGui.update(remoteRender, 0, 0, 100, 200, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
                     // VideoRendererGui.update(localRender, 72, 72, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
                 }
             }
