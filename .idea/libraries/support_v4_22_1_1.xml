@@ -1,14 +1,14 @@
 <component name="libraryTable">
   <library name="support-v4-22.1.1">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar!/" />
-      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/res" />
-      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/a39914c9b9ee00d70466b0f1dea16e17af94f9ab/output/jars/libs/internal_impl-22.1.1.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/a39914c9b9ee00d70466b0f1dea16e17af94f9ab/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/a39914c9b9ee00d70466b0f1dea16e17af94f9ab/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://C:/Android/Android/android-sdk/extras/android/m2repository/com/android/support/support-v4/22.1.1/support-v4-22.1.1-sources.jar!/" />
       <root url="jar://$USER_HOME$/android-sdks/extras/android/m2repository/com/android/support/support-v4/22.1.1/support-v4-22.1.1-sources.jar!/" />
+      <root url="jar://C:/Android/Android/android-sdk/extras/android/m2repository/com/android/support/support-v4/22.1.1/support-v4-22.1.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

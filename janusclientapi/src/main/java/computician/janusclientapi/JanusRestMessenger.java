@@ -1,6 +1,7 @@
 package computician.janusclientapi;
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.math.BigInteger;
 import com.koushikdutta.async.*;
@@ -82,6 +83,7 @@ public class JanusRestMessenger implements IJanusMessenger {
     @Override
     public void sendMessage(String message) {
         //todo
+        Log.d("message", "Sent: \n\t" + message);
         if(resturi.isEmpty())
             resturi = uri;
         AsyncHttpRequest request = new AsyncHttpRequest(Uri.parse(resturi),"post");
@@ -139,6 +141,7 @@ public class JanusRestMessenger implements IJanusMessenger {
     public void receivedMessage(String msg) {
 
         try {
+            Log.d("message", "Recv: \n\t" + msg);
             JSONObject obj = new JSONObject(msg);
             handler.receivedNewMessage(obj);
         } catch (Exception ex) {

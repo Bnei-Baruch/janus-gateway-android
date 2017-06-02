@@ -1,5 +1,16 @@
 <resources>
-    <string name="app_name">JanusClient</string>
+    <string name="app_name">LiveST</string>
 
-    <string name="title_activity_janus">JanusActivity</string>
+    <string name="title_activity_janus">LiveST</string>
+    <string name="mediacontroller_play_pause">Play/Pause</string>
+    <string name="language">Select language</string>
 </resources>
+
+
+    <!--2: "Hebrew",-->
+    <!--3: "Russian",-->
+    <!--4: "English",-->
+    <!--5: "French",-->
+    <!--6: "Spanish",-->
+    <!--7: "German",-->
+    <!--8: "Italian"-->

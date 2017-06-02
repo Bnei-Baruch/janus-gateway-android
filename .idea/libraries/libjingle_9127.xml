@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="libjingle-9127">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/io.pristine/libjingle/9127/res" />
-      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/io.pristine/libjingle/9127/jars/libs/libjingle_peerconnection.jar!/" />
-      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/io.pristine/libjingle/9127/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/49a552ca359dce449414482f8fb03f7c3e1714ad/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/49a552ca359dce449414482f8fb03f7c3e1714ad/output/jars/libs/libjingle_peerconnection.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/49a552ca359dce449414482f8fb03f7c3e1714ad/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

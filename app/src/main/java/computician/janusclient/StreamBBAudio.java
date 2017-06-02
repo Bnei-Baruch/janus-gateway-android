@@ -27,14 +27,17 @@ import computician.janusclientapi.PluginHandleSendMessageCallbacks;
  */
 public class StreamBBAudio {
 
-  private final String JANUS_URI = "http://itgb.net:8088/janus";
+//  private final String JANUS_URI = "http://itgb.net:8088/janus";
+    //private final String JANUS_URI = "http://jnseur.kbb1.com:8088/janus";
+
+    private final String JANUS_URI = "https://v4g.kbb1.com/janusios";
     //private final String JANUS_URI = " http://v4g.kbb1.com:8088/janus";
 
     //private final String JANUS_URI = "http://188.165.249.44:8088/janus";
     private JanusPluginHandle handle = null;
     private final VideoRenderer.Callbacks  remoteRender;
     private final JanusServer janusServer;
-
+    private int streamId = 15;
 
 
     public class JanusGlobalCallbacks implements IJanusGatewayCallbacks {
@@ -83,7 +86,7 @@ public class StreamBBAudio {
 
 
     public class JanusPluginCallbacksAudio implements IJanusPluginCallbacks {
-        int streamId;
+
 //        public JanusPluginCallbacks(int id) {
 //             streamId = id;
 //        }
@@ -99,7 +102,7 @@ public class StreamBBAudio {
             try {
 
                 obj.put("request", "watch");
-                obj.put("id", 2);
+                obj.put("id", streamId);
                 msg.put("message", obj);
                 handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
 
@@ -369,6 +372,32 @@ public class StreamBBAudio {
 
     public void Start() {
         janusServer.Connect();
+    }
+
+    public void setId(int id)
+    {
+        streamId = id;
+    }
+
+    public void stop ()
+    {
+
+        JSONObject msg = new JSONObject();
+        JSONObject obj = new JSONObject();
+
+        try {
+
+            obj.put("request", "stop");
+
+            msg.put("message", obj);
+            handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
+            handle.detach();
+
+
+        }
+        catch (Exception e) {
+        }
+
     }
 }
 
