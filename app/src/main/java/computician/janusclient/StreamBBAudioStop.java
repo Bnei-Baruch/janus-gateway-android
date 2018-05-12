@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import org.webrtc.MediaStream;
 import org.webrtc.PeerConnection;
 import org.webrtc.VideoRenderer;
-import org.webrtc.VideoRendererGui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +101,7 @@ public class StreamBBAudioStop {
                 obj.put("request", "stop");
                 msg.put("message", obj);
                 handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
+                handle.hangUp();
 
             }
             catch (Exception e) {
@@ -121,11 +121,12 @@ public class StreamBBAudioStop {
                         try {
                             JSONObject body = new JSONObject();
                             JSONObject msg = new JSONObject();
-                            body.put("request", "start");
+                            body.put("request", "stop");
 
                             msg.put("message", body);
                             msg.put("jsep", obj);
                             handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
+                            handle.hangUp();
                         } catch (Exception e) {
 
                         }
@@ -175,7 +176,7 @@ public class StreamBBAudioStop {
                 if (stream.videoTracks.get(0).enabled()) {
                     Log.d("JANUSCLIENT", "video tracks enabled");
                     stream.videoTracks.get(0).addRenderer(new VideoRenderer(remoteRender));
-                    VideoRendererGui.update(remoteRender, 0, 0, 25, 50, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
+//                    VideoRendererGui.update(remoteRender, 0, 0, 25, 50, VideoRendererGui.  .SCALE_ASPECT_FIT, false);
                     // VideoRendererGui.update(localRender, 72, 72, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
                 }
             }
@@ -259,11 +260,12 @@ public class StreamBBAudioStop {
                         try {
                             JSONObject body = new JSONObject();
                             JSONObject msg = new JSONObject();
-                            body.put("request", "start");
+                            body.put("request", "stop");
 
                             msg.put("message", body);
                             msg.put("jsep", obj);
                             handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
+                            handle.hangUp();
                         } catch (Exception e) {
 
                         }
@@ -313,7 +315,7 @@ public class StreamBBAudioStop {
                 if (stream.videoTracks.get(0).enabled()) {
                     Log.d("JANUSCLIENT", "video tracks enabled");
                     stream.videoTracks.get(0).addRenderer(new VideoRenderer(remoteRender));
-                    VideoRendererGui.update(remoteRender, 0, 0, 25, 50, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
+//                    VideoRendererGui.update(remoteRender, 0, 0, 25, 50, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
                     // VideoRendererGui.update(localRender, 72, 72, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
                 }
             }

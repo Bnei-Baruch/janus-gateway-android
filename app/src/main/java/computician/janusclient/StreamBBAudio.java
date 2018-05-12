@@ -382,16 +382,63 @@ public class StreamBBAudio {
     public void stop ()
     {
 
-        JSONObject msg = new JSONObject();
-        JSONObject obj = new JSONObject();
+
 
         try {
 
-            obj.put("request", "stop");
+//            handle.createOffer(new IPluginHandleWebRTCCallbacks() {
+//                                   @Override
+//                                   public void onSuccess(JSONObject obj) {
+//                                       JSONObject msg = new JSONObject();
+//
+//                                       JSONObject body = new JSONObject();
+//
+//                                       try {
+//                                           body.put("request", "stop");
+//                                           msg.put("message", body);
+//                                           msg.put("jsep", obj);
+//                                           handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
+//
+//                                       } catch (JSONException e) {
+//                                           e.printStackTrace();
+//                                       }
+//
+//
+//                                   }
+//
+//                                   @Override
+//                                   public JSONObject getJsep() {
+//                                       return null;
+//                                   }
+//
+//                                   @Override
+//                                   public JanusMediaConstraints getMedia() {
+//                                       JanusMediaConstraints cons = new JanusMediaConstraints();
+//                                       cons.setRecvAudio(false);
+//                                       cons.setRecvVideo(false);
+//                                       cons.setSendAudio(false);
+//                                       return cons;
+//                                   }
+//
+//                                   @Override
+//                                   public Boolean getTrickle() {
+//                                       return true;
+//                                   }
+//
+//                                   @Override
+//                                   public void onCallbackError(String error) {
+//
+//                                   }
+//                               });
 
-            msg.put("message", obj);
-            handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
-            handle.detach();
+                                        JSONObject msg = new JSONObject();
+
+                                        JSONObject body = new JSONObject();
+                                        body.put("request", "stop");
+                                        msg.put("message", body);
+                                        handle.sendMessage(new PluginHandleSendMessageCallbacks(msg));
+
+
 
 
         }

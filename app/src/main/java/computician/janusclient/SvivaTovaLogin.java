@@ -1,8 +1,6 @@
 package computician.janusclient;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.opengl.EGLContext;
 import android.os.Bundle;
@@ -17,9 +15,6 @@ import android.widget.TextView;
 
 import org.webrtc.VideoRenderer;
 import org.webrtc.VideoRendererGui;
-
-import computician.janusclient.CommonUtils;
-import computician.janusclient.SvivaTovaLoginApiHelper;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -153,7 +148,7 @@ public class SvivaTovaLogin extends BaseActivity implements LanguageSeletedListe
 
 				//String location = shared.getString("audiourl", "http://icecast.kab.tv/heb.mp3");
 				if (shared.getBoolean("isPlaying", true)) {
-					but.setImageResource(R.drawable.mediacontroller_pause01);
+					but.setImageResource(R.drawable.mediacontroller_play01);
 
 					//stop the player
 //					stream = new StreamBBVideo(remoteRender1);
@@ -178,7 +173,7 @@ public class SvivaTovaLogin extends BaseActivity implements LanguageSeletedListe
 				} else
 
 				{
-					but.setImageResource(R.drawable.mediacontroller_play01);
+					but.setImageResource(R.drawable.mediacontroller_pause01);
 //									svc=new Intent(StreamListActivity.this, AudioPlayerFactory.GetAudioPlayer(StreamListActivity.this).getClass());
 
 					//start player
