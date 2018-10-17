@@ -94,6 +94,19 @@
             android:layout_alignParentBottom="true"
             android:ellipsize="marquee"
             android:singleLine="true" />
+        <ImageButton
+            android:id="@+id/mediacontroller_route"
+            android:layout_width="54.6dip"
+            android:layout_height="32dip"
+            android:layout_alignParentLeft="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="7.0dip"
+            android:background="#00000000"
+            android:contentDescription="@string/mediacontroller_play_pause"
+            android:gravity="center"
+            android:src="@drawable/sp_24" />
+
     </RelativeLayout>
 
 </RelativeLayout>

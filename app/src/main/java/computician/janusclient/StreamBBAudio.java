@@ -180,6 +180,7 @@ public class StreamBBAudio {
                     stream.videoTracks.get(0).addRenderer(new VideoRenderer(remoteRender));
                     VideoRendererGui.update(remoteRender, 0, 0, 25, 50, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
                     // VideoRendererGui.update(localRender, 72, 72, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
+
                 }
             }
 //            stream.audioTracks.get(0).setEnabled(true);
