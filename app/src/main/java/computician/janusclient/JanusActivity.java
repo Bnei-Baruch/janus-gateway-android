@@ -6,6 +6,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothHeadset;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,6 +35,7 @@ import android.widget.ListView;
 import org.webrtc.VideoRenderer;
 import org.webrtc.VideoRendererGui;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import computician.janusclient.util.SystemUiHider;
@@ -51,6 +53,7 @@ public class JanusActivity extends Activity {
     private StreamBBVideo stream;
     private StreamBBAudio streamAudio;
     private VideoRoomTest videoRoomTest;
+    private HashMap<String,state>buttonState;
 
     /**
      * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
@@ -121,6 +124,11 @@ public class JanusActivity extends Activity {
         java.lang.System.setProperty("java.net.preferIPv4Stack", "true");
         super.onCreate(savedInstanceState);
 
+        buttonState =  new HashMap<>(3);
+        buttonState.put("speaker",state.OFF);
+        buttonState.put("ear",state.ON);
+        buttonState.put("bt",state.DISCONNECTED);
+
         final Intent intent = new Intent();
 		final String packageName = getPackageName();
 		PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
@@ -176,6 +184,12 @@ public class JanusActivity extends Activity {
         remoteRender2 = VideoRendererGui.create(0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
     }
 
+    public  boolean isBluetoothHeadsetConnected() {
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        return mBluetoothAdapter != null && mBluetoothAdapter.isEnabled()
+                && mBluetoothAdapter.getProfileConnectionState(BluetoothHeadset.HEADSET) == BluetoothHeadset.STATE_CONNECTED;
+    }
+
     public void onSelectLanguage(final String lang) {
         // TODO Auto-generated method stub
         int index = CommonUtils.languages.indexOf(lang);
@@ -211,14 +225,40 @@ public class JanusActivity extends Activity {
 
         final ImageButton route = (ImageButton) playDialog.findViewById(R.id.mediacontroller_route);
 
+        route.setImageResource(R.drawable.head_24);
         route.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+
+
                 //mBtAdapter.getProfileProxy(this, mA2dpListener , BluetoothProfile.A2DP);
                 mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-                mAudioManager.isBluetoothScoOn();
-                mAudioManager.isSpeakerphoneOn();
+               if(isBluetoothHeadsetConnected() && mAudioManager.isBluetoothScoOn()) {
+                   mAudioManager.setBluetoothScoOn(false);
+                   mAudioManager.setSpeakerphoneOn(true);
+                   route.setImageResource(R.drawable.sp_24);
+                   return;
+               }
+
+                if( mAudioManager.isSpeakerphoneOn()) {
+                    mAudioManager.setBluetoothScoOn(false);
+                    mAudioManager.setSpeakerphoneOn(false);
+                    route.setImageResource(R.drawable.head_24);
+                    return;
+                }
+
+                if(!mAudioManager.isSpeakerphoneOn() && !mAudioManager.isBluetoothScoOn()) {
+                    if (isBluetoothHeadsetConnected()) {
+                        mAudioManager.setBluetoothScoOn(true);
+                        route.setImageResource(R.drawable.bt_24);
+                    } else {
+                        mAudioManager.setSpeakerphoneOn(true);
+                        route.setImageResource(R.drawable.sp_24);
+                    }
+                    return;
+                }
+
+
                 
             }
         });
@@ -347,6 +387,11 @@ public class JanusActivity extends Activity {
         notificationManager.notify(1, notification);
 
     }
+
+    private void turnOn(String key) {
+
+    }
+
     private NotificationCompat.Builder getGeneralNotificationBuilder(String title, String textContent, int smallIconResId, int largeIconResId, boolean autoCancel, long sendTime)
     {
         // Create a Notification Builder instance.
@@ -479,6 +524,12 @@ public class JanusActivity extends Activity {
             });
             playDialog.show();
         }
+    }
+
+    public enum state{
+        ON,
+        OFF,
+        DISCONNECTED
     }
 
 }
