@@ -231,9 +231,10 @@ public class JanusActivity extends Activity {
             public void onClick(View view) {
 
 
+
                 //mBtAdapter.getProfileProxy(this, mA2dpListener , BluetoothProfile.A2DP);
                 mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-               if(isBluetoothHeadsetConnected() && mAudioManager.isBluetoothScoOn()) {
+               if(isBluetoothHeadsetConnected() && mAudioManager.isBluetoothScoOn() && mAudioManager.isWiredHeadsetOn()) {
                    mAudioManager.setBluetoothScoOn(false);
                    mAudioManager.setSpeakerphoneOn(true);
                    route.setImageResource(R.drawable.sp_24);
