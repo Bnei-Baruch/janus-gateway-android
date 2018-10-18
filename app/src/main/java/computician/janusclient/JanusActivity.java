@@ -2,9 +2,6 @@ package computician.janusclient;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothHeadset;
 import android.content.Context;
@@ -234,15 +231,22 @@ public class JanusActivity extends Activity {
 
                 //mBtAdapter.getProfileProxy(this, mA2dpListener , BluetoothProfile.A2DP);
                 mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-               if(isBluetoothHeadsetConnected() && mAudioManager.isBluetoothScoOn() && mAudioManager.isWiredHeadsetOn()) {
+               if(isBluetoothHeadsetConnected() && mAudioManager.isBluetoothScoOn()) {
                    mAudioManager.setBluetoothScoOn(false);
-                   mAudioManager.setSpeakerphoneOn(true);
-                   route.setImageResource(R.drawable.sp_24);
+                   mAudioManager.stopBluetoothSco();
+                   if(!mAudioManager.isWiredHeadsetOn()) {
+                       mAudioManager.setSpeakerphoneOn(true);
+                       route.setImageResource(R.drawable.sp_24);
+                   }else
+                   {
+                       route.setImageResource(R.drawable.head_24);
+                   }
                    return;
                }
 
                 if( mAudioManager.isSpeakerphoneOn()) {
                     mAudioManager.setBluetoothScoOn(false);
+                    mAudioManager.stopBluetoothSco();
                     mAudioManager.setSpeakerphoneOn(false);
                     route.setImageResource(R.drawable.head_24);
                     return;
@@ -251,10 +255,13 @@ public class JanusActivity extends Activity {
                 if(!mAudioManager.isSpeakerphoneOn() && !mAudioManager.isBluetoothScoOn()) {
                     if (isBluetoothHeadsetConnected()) {
                         mAudioManager.setBluetoothScoOn(true);
+                        mAudioManager.startBluetoothSco();
                         route.setImageResource(R.drawable.bt_24);
                     } else {
-                        mAudioManager.setSpeakerphoneOn(true);
-                        route.setImageResource(R.drawable.sp_24);
+                        if(!mAudioManager.isWiredHeadsetOn()) {
+                            mAudioManager.setSpeakerphoneOn(true);
+                            route.setImageResource(R.drawable.sp_24);
+                        }
                     }
                     return;
                 }
@@ -355,37 +362,37 @@ public class JanusActivity extends Activity {
         });
         playDialog.show();
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-// Create NotificationManager.
-
-        // NotificationTargetActivity is the activity opened when user click notification.
-        Intent intent = new Intent(JanusActivity.this, JanusActivity.class);
-        Intent intentArr[] = {intent};
-
-        PendingIntent pendingIntent = PendingIntent.getActivities(JanusActivity.this, 0, intentArr, 0);
-
-        // Create a Notification Builder instance.
-        String title = "Normal Size Happy Christmas. ";
-        String textContent = "Christmas is comming --- dev2qa.com";
-
-        long sendTime = System.currentTimeMillis();
-        boolean autoCancel = false;
-
-        // Get general settings Builder instance.
-        NotificationCompat.Builder builder = getGeneralNotificationBuilder(title, textContent, R.drawable.icon, R.drawable.icon, autoCancel, sendTime);
-
-        // Set content intent.
-        builder.setContentIntent(pendingIntent);
-
-        // Use both light, sound and vibrate.
-        builder.setDefaults(Notification.DEFAULT_ALL);
-
-        // Create Notification instance.
-        Notification notification = builder.build();
-        //notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_INSISTENT;
-
-        // Send the notification.
-        notificationManager.notify(1, notification);
+//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//// Create NotificationManager.
+//
+//        // NotificationTargetActivity is the activity opened when user click notification.
+//        Intent intent = new Intent(JanusActivity.this, JanusActivity.class);
+//        Intent intentArr[] = {intent};
+//
+//        PendingIntent pendingIntent = PendingIntent.getActivities(JanusActivity.this, 0, intentArr, 0);
+//
+//        // Create a Notification Builder instance.
+//        String title = "Normal Size Happy Christmas. ";
+//        String textContent = "Christmas is comming --- dev2qa.com";
+//
+//        long sendTime = System.currentTimeMillis();
+//        boolean autoCancel = false;
+//
+//        // Get general settings Builder instance.
+//        NotificationCompat.Builder builder = getGeneralNotificationBuilder(title, textContent, R.drawable.icon, R.drawable.icon, autoCancel, sendTime);
+//
+//        // Set content intent.
+//        builder.setContentIntent(pendingIntent);
+//
+//        // Use both light, sound and vibrate.
+//        builder.setDefaults(Notification.DEFAULT_ALL);
+//
+//        // Create Notification instance.
+//        Notification notification = builder.build();
+//        //notification.flags = Notification.FLAG_ONGOING_EVENT | Notification.FLAG_SHOW_LIGHTS | Notification.FLAG_INSISTENT;
+//
+//        // Send the notification.
+//        notificationManager.notify(1, notification);
 
     }
 
