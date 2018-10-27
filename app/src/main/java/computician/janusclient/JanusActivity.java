@@ -85,6 +85,16 @@ public class JanusActivity extends FragmentActivity {
         }
     }
 
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!settings.getBoolean("isPlaying", false)) {
+            streamAudio.release();
+        }
+
+    }
     private void init() {
         try {
             EGLContext con = VideoRendererGui.getEGLContext();

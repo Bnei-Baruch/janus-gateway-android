@@ -27,6 +27,7 @@ import computician.janusclientapi.PluginHandleSendMessageCallbacks;
  * Created by igal on 12/5/15.
  */
 public class StreamBBAudio {
+    private static final String TAG = "StreamBBAudio";
 
 //  private final String JANUS_URI = "http://itgb.net:8088/janus";
     //private final String JANUS_URI = "http://jnseur.kbb1.com:8088/janus";
@@ -39,6 +40,11 @@ public class StreamBBAudio {
     private final VideoRenderer.Callbacks  remoteRender;
     private final JanusServer janusServer;
     private int streamId = 15;
+
+    public void release() {
+        Log.d(TAG,"releasing streambbaudio");
+        janusServer.Destroy();
+    }
 
 
     public class JanusGlobalCallbacks implements IJanusGatewayCallbacks {
