@@ -1,6 +1,5 @@
 package computician.janusclient;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothHeadset;
@@ -19,6 +18,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import org.webrtc.RendererCommon;
 import org.webrtc.VideoRenderer;
 import org.webrtc.VideoRendererGui;
 
@@ -37,7 +38,7 @@ import java.util.Map;
 
 import computician.janusclient.util.SystemUiHider;
 
-public class JanusActivity extends Activity {
+public class JanusActivity extends FragmentActivity {
     private static final boolean AUTO_HIDE = true;
 
 
@@ -162,6 +163,7 @@ public class JanusActivity extends Activity {
         langsIdmap= CommonUtils.getHashMapResource(JanusActivity.this, R.xml.langsids);
         ArrayAdapter<String> itemsAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, CommonUtils.languages);
+
         langauges.setAdapter(itemsAdapter);
         langauges.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -177,8 +179,8 @@ public class JanusActivity extends Activity {
         VideoRendererGui.setView(vsv, new MyInit());
 
        // localRender = VideoRendererGui.create(72, 72, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
-        remoteRender1 = VideoRendererGui.create(0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
-        remoteRender2 = VideoRendererGui.create(0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
+        remoteRender1 = VideoRendererGui.create(0, 0, 25, 25, RendererCommon.ScalingType.SCALE_ASPECT_FIT, false);
+        remoteRender2 = VideoRendererGui.create(0, 0, 25, 25, RendererCommon.ScalingType.SCALE_ASPECT_FIT, false);
     }
 
     public  boolean isBluetoothHeadsetConnected() {

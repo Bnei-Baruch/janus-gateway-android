@@ -56,7 +56,7 @@ public class JanusPluginHandle {
 
         @Override
         public void onSetFailure(String error) {
-            Log.d("JANUSCLIENT", "On set Failure");
+            Log.d("JANUSCLIENT", "On set Failure: "+error);
             //todo JS api does not account for this
             webRtcCallbacks.onCallbackError(error);
         }
@@ -111,6 +111,11 @@ public class JanusPluginHandle {
                 default:
                     break;
             }
+        }
+
+        @Override
+        public void onIceConnectionReceivingChange(boolean b) {
+
         }
 
         @Override
@@ -321,12 +326,12 @@ public class JanusPluginHandle {
             if (callbacks.getMedia().getSendVideo()) {
                 VideoCapturerAndroid capturer = null;
                 switch (callbacks.getMedia().getCamera()) {
-                    case back:
-                        capturer = VideoCapturerAndroid.create(VideoCapturerAndroid.getNameOfBackFacingDevice());
-                        break;
-                    case front:
-                        capturer = VideoCapturerAndroid.create(VideoCapturerAndroid.getNameOfFrontFacingDevice());
-                        break;
+//                    case back:
+//                        capturer = VideoCapturerAndroid.create(VideoCapturerAndroid.getNameOfBackFacingDevice());
+//                        break;
+//                    case front:
+//                        capturer = VideoCapturerAndroid.create(VideoCapturerAndroid.getNameOfFrontFacingDevice());
+//                        break;
                 }
                 MediaConstraints constraints = new MediaConstraints();
                 JanusMediaConstraints.JanusVideo videoConstraints = callbacks.getMedia().getVideo();

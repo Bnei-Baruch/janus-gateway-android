@@ -30,7 +30,7 @@ repositories {
 }
 dependencies {
     compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'io.pristine:libjingle:9127@aar'
+    compile 'io.pristine:libjingle:9814@aar'
     compile 'com.koushikdutta.async:androidasync:2.+'
     compile 'com.mcxiaoke.volley:library:1.0.15@aar'
 }

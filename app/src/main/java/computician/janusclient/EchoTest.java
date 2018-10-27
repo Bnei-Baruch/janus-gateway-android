@@ -1,14 +1,12 @@
 package computician.janusclient;
 
-import android.app.Application;
 import android.content.Context;
-import android.opengl.EGLContext;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONObject;
 import org.webrtc.MediaStream;
 import org.webrtc.PeerConnection;
+import org.webrtc.RendererCommon;
 import org.webrtc.VideoRenderer;
 import org.webrtc.VideoRendererGui;
 
@@ -249,7 +247,7 @@ public class EchoTest {
             if(stream.videoTracks.get(0).enabled())
                 Log.d("JANUSCLIENT", "video tracks enabled");
             stream.videoTracks.get(0).addRenderer(new VideoRenderer(remoteRender));
-            VideoRendererGui.update(remoteRender, 0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, true);
+            VideoRendererGui.update(remoteRender, 0, 0, 25, 25, RendererCommon.ScalingType.SCALE_ASPECT_FILL, true);
            // VideoRendererGui.update(localRender, 72, 72, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FILL, false);
         }
 
@@ -291,7 +289,7 @@ public class EchoTest {
         janusServer = new JanusServer(new JanusGlobalCallbacks());
     }
 
-    public boolean initializeMediaContext(Context context, boolean audio, boolean video, boolean videoHwAcceleration, EGLContext eglContext){
+    public boolean initializeMediaContext(Context context, boolean audio, boolean video, boolean videoHwAcceleration, android.opengl.EGLContext eglContext){
         return janusServer.initializeMediaContext(context, audio, video, videoHwAcceleration, eglContext);
     }
 
