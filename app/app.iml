@@ -146,6 +146,7 @@
     <orderEntry type="library" exported="" name="Gradle: com.android.support:collections:28.0.0@jar" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.koushikdutta.async:androidasync-2.2.1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.android.support:documentfile-28.0.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support.constraint:constraint-layout-1.1.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: io.pristine:libjingle-9814" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.android.support:swiperefreshlayout-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.jetbrains:annotations:13.0@jar" level="project" />
@@ -170,6 +171,7 @@
     <orderEntry type="library" exported="" name="Gradle: com.android.support:animated-vector-drawable-28.0.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.2.61@jar" level="project" />
     <orderEntry type="library" exported="" name="Gradle: com.android.support:appcompat-v7-28.0.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.android.support.constraint:constraint-layout-solver:1.1.3@jar" level="project" />
     <orderEntry type="library" exported="" name="Gradle: android.arch.lifecycle:runtime-1.1.1" level="project" />
     <orderEntry type="module" module-name="janusclientapi" exported="" />
     <orderEntry type="library" exported="" name="Gradle: org.apache.http.legacy-android-28" level="project" />

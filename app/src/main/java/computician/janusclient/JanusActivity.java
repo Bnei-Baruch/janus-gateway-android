@@ -3,10 +3,7 @@ package computician.janusclient;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothHeadset;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
@@ -16,7 +13,6 @@ import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NotificationCompat;
@@ -26,7 +22,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
 
 import org.webrtc.RendererCommon;
@@ -89,10 +84,10 @@ public class JanusActivity extends FragmentActivity {
     public void onStop()
     {
         super.onStop();
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!settings.getBoolean("isPlaying", false)) {
-            streamAudio.release();
-        }
+//        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+//        if (!settings.getBoolean("isPlaying", false)) {
+//            streamAudio.release();
+//        }
 
     }
     private void init() {
@@ -205,174 +200,175 @@ public class JanusActivity extends FragmentActivity {
         String langcode = CommonUtils.langs.get(index);
         CommonUtils.setLastKnownLang(langcode, this);
 
-        //play audio with selected language
-        //startActivity(new Intent(this,JanusActivity.class));
-        //startActivity(new Intent(this,MediaController.class));
-        //Start streamlist activity
-        playDialog = new Dialog(this);
-        playDialog.setTitle("Playing audio");
-        playDialog.setContentView(R.layout.mediacontroller);
-        final ImageButton but = (ImageButton) playDialog.findViewById(R.id.mediacontroller_play_pause);
-        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(JanusActivity.this);
 
-        but.setImageResource(R.drawable.mediacontroller_pause01);
-        EGLContext con = VideoRendererGui.getEGLContext();
-        streamAudio = new StreamBBAudio(null);
-        streamAudio.setId(Integer.parseInt(langsIdmap.get(CommonUtils.getLastKnownLang(JanusActivity.this))));
-        streamAudio.initializeMediaContext(JanusActivity.this, true, false, true, con);
-        streamAudio.Start();
-//		  Intent intent1  = new Intent(this,JanusPlayer.class);
-//		  intent1.setAction((langsIdmap.get(CommonUtils.getLastKnownLang(SvivaTovaLogin.this))));
+
+        startActivity(new Intent(this,AudioControlActivity.class));
+
+
+//        playDialog = new Dialog(this);
+//        playDialog.setTitle("Playing audio");
+//        playDialog.setContentView(R.layout.mediacontroller);
+//        final ImageButton but = (ImageButton) playDialog.findViewById(R.id.mediacontroller_play_pause);
+//        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(JanusActivity.this);
 //
-//            startService(intent1);
-        SharedPreferences.Editor ed = shared.edit();
-        ed.putBoolean("isPlaying", true);
-        ed.commit();
-
-//            mAudioManager.setBluetoothScoOn(true);
-//            mAudioManager.startBluetoothSco();
-
-        final ImageButton route = (ImageButton) playDialog.findViewById(R.id.mediacontroller_route);
-
-        route.setImageResource(R.drawable.head_24);
-        route.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-
-                //mBtAdapter.getProfileProxy(this, mA2dpListener , BluetoothProfile.A2DP);
-                mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-               if(isBluetoothHeadsetConnected() && mAudioManager.isBluetoothScoOn()) {
-                   mAudioManager.setBluetoothScoOn(false);
-                   mAudioManager.stopBluetoothSco();
-                   if(!mAudioManager.isWiredHeadsetOn()) {
-                       mAudioManager.setSpeakerphoneOn(true);
-                       route.setImageResource(R.drawable.sp_24);
-                   }else
-                   {
-                       route.setImageResource(R.drawable.head_24);
-                   }
-                   return;
-               }
-
-                if( mAudioManager.isSpeakerphoneOn()) {
-                    mAudioManager.setBluetoothScoOn(false);
-                    mAudioManager.stopBluetoothSco();
-                    mAudioManager.setSpeakerphoneOn(false);
-                    route.setImageResource(R.drawable.head_24);
-                    return;
-                }
-
-                if(!mAudioManager.isSpeakerphoneOn() && !mAudioManager.isBluetoothScoOn()) {
-                    if (isBluetoothHeadsetConnected()) {
-                        mAudioManager.setBluetoothScoOn(true);
-                        mAudioManager.startBluetoothSco();
-                        route.setImageResource(R.drawable.bt_24);
-                    } else {
-                        if(!mAudioManager.isWiredHeadsetOn()) {
-                            mAudioManager.setSpeakerphoneOn(true);
-                            route.setImageResource(R.drawable.sp_24);
-                        }
-                    }
-                    return;
-                }
-
-
-                
-            }
-        });
-        but.setImageResource(R.drawable.mediacontroller_pause01);
-        but.setOnClickListener(new View.OnClickListener() {
-
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                EGLContext con = VideoRendererGui.getEGLContext();
-                SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(JanusActivity.this);
-
-
-                //String location = shared.getString("audiourl", "http://icecast.kab.tv/heb.mp3");
-                if (shared.getBoolean("isPlaying", true)) {
-                    but.setImageResource(R.drawable.mediacontroller_play01);
-
-                    //stop the player
-//					stream = new StreamBBVideo(remoteRender1);
-//					stream.initializeMediaContext(this, true, true, true, con);
-//					stream.Start();
-
-                    VideoRenderer.Callbacks remoteRender2;
-                    //remoteRender2 = VideoRendererGui.create(0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
-
-                    if (streamAudio != null) {
-                        try {
-                            SharedPreferences.Editor ed = shared.edit();
-                            ed.putBoolean("isPlaying", false);
-                            ed.commit();
-                            streamAudio.stop();
-
-                        } catch (Exception e) {
-
-                        }
-                    }
-
-                } else
-
-                {
-                    but.setImageResource(R.drawable.mediacontroller_pause01);
-//									svc=new Intent(StreamListActivity.this, AudioPlayerFactory.GetAudioPlayer(StreamListActivity.this).getClass());
-
-                    //start player
-//					 stream = new StreamBBVideo(remoteRender1);
-//					stream.initializeMediaContext(this, true, true, true, con);
-//					stream.Start();
-                    VideoRenderer.Callbacks remoteRender2;
-                    //remoteRender2 = VideoRendererGui.create(0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
-
-                    streamAudio = new StreamBBAudio(null);
-                    streamAudio.setId(Integer.parseInt(langsIdmap.get(CommonUtils.getLastKnownLang(JanusActivity.this))));
-                    streamAudio.initializeMediaContext(JanusActivity.this, true, false, true, con);
-                    streamAudio.Start();
-                    SharedPreferences.Editor ed = shared.edit();
-                    ed.putBoolean("isPlaying", true);
-                    ed.commit();
-
-                }
-            }
-        });
-
-        playDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(JanusActivity.this);
-                if (shared.getBoolean("isPlaying", true)) {
-                    but.setImageResource(R.drawable.mediacontroller_play01);
-
-                    //stop the player
-//					stream = new StreamBBVideo(remoteRender1);
-//					stream.initializeMediaContext(this, true, true, true, con);
-//					stream.Start();
-
-                    VideoRenderer.Callbacks remoteRender2;
-                    //remoteRender2 = VideoRendererGui.create(0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
-
-                    if (streamAudio != null) {
-                        try {
-                            SharedPreferences.Editor ed = shared.edit();
-                            ed.putBoolean("isPlaying", false);
-                            ed.commit();
-                            streamAudio.stop();
-
-                        } catch (Exception e) {
-
-                        }
-                    }
-
-                }
-            }
-        });
-        playDialog.show();
+//        but.setImageResource(R.drawable.mediacontroller_pause01);
+//        EGLContext con = VideoRendererGui.getEGLContext();
+//        streamAudio = new StreamBBAudio(null);
+//        streamAudio.setId(Integer.parseInt(langsIdmap.get(CommonUtils.getLastKnownLang(JanusActivity.this))));
+//        streamAudio.initializeMediaContext(JanusActivity.this, true, false, true, con);
+//        streamAudio.Start();
+////		  Intent intent1  = new Intent(this,JanusPlayer.class);
+////		  intent1.setAction((langsIdmap.get(CommonUtils.getLastKnownLang(SvivaTovaLogin.this))));
+////
+////            startService(intent1);
+//        SharedPreferences.Editor ed = shared.edit();
+//        ed.putBoolean("isPlaying", true);
+//        ed.commit();
+//
+////            mAudioManager.setBluetoothScoOn(true);
+////            mAudioManager.startBluetoothSco();
+//
+//        final ImageButton route = (ImageButton) playDialog.findViewById(R.id.mediacontroller_route);
+//
+//        route.setImageResource(R.drawable.head_24);
+//        route.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//
+//
+//                //mBtAdapter.getProfileProxy(this, mA2dpListener , BluetoothProfile.A2DP);
+//                mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//               if(isBluetoothHeadsetConnected() && mAudioManager.isBluetoothScoOn()) {
+//                   mAudioManager.setBluetoothScoOn(false);
+//                   mAudioManager.stopBluetoothSco();
+//                   if(!mAudioManager.isWiredHeadsetOn()) {
+//                       mAudioManager.setSpeakerphoneOn(true);
+//                       route.setImageResource(R.drawable.sp_24);
+//                   }else
+//                   {
+//                       route.setImageResource(R.drawable.head_24);
+//                   }
+//                   return;
+//               }
+//
+//                if( mAudioManager.isSpeakerphoneOn()) {
+//                    mAudioManager.setBluetoothScoOn(false);
+//                    mAudioManager.stopBluetoothSco();
+//                    mAudioManager.setSpeakerphoneOn(false);
+//                    route.setImageResource(R.drawable.head_24);
+//                    return;
+//                }
+//
+//                if(!mAudioManager.isSpeakerphoneOn() && !mAudioManager.isBluetoothScoOn()) {
+//                    if (isBluetoothHeadsetConnected()) {
+//                        mAudioManager.setBluetoothScoOn(true);
+//                        mAudioManager.startBluetoothSco();
+//                        route.setImageResource(R.drawable.bt_24);
+//                    } else {
+//                        if(!mAudioManager.isWiredHeadsetOn()) {
+//                            mAudioManager.setSpeakerphoneOn(true);
+//                            route.setImageResource(R.drawable.sp_24);
+//                        }
+//                    }
+//                    return;
+//                }
+//
+//
+//
+//            }
+//        });
+//        but.setImageResource(R.drawable.mediacontroller_pause01);
+//        but.setOnClickListener(new View.OnClickListener() {
+//
+//
+//            @Override
+//            public void onClick(View v) {
+//                // TODO Auto-generated method stub
+//                EGLContext con = VideoRendererGui.getEGLContext();
+//                SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(JanusActivity.this);
+//
+//
+//                //String location = shared.getString("audiourl", "http://icecast.kab.tv/heb.mp3");
+//                if (shared.getBoolean("isPlaying", true)) {
+//                    but.setImageResource(R.drawable.mediacontroller_play01);
+//
+//                    //stop the player
+////					stream = new StreamBBVideo(remoteRender1);
+////					stream.initializeMediaContext(this, true, true, true, con);
+////					stream.Start();
+//
+//                    VideoRenderer.Callbacks remoteRender2;
+//                    //remoteRender2 = VideoRendererGui.create(0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
+//
+//                    if (streamAudio != null) {
+//                        try {
+//                            SharedPreferences.Editor ed = shared.edit();
+//                            ed.putBoolean("isPlaying", false);
+//                            ed.commit();
+//                            streamAudio.stop();
+//
+//                        } catch (Exception e) {
+//
+//                        }
+//                    }
+//
+//                } else
+//
+//                {
+//                    but.setImageResource(R.drawable.mediacontroller_pause01);
+////									svc=new Intent(StreamListActivity.this, AudioPlayerFactory.GetAudioPlayer(StreamListActivity.this).getClass());
+//
+//                    //start player
+////					 stream = new StreamBBVideo(remoteRender1);
+////					stream.initializeMediaContext(this, true, true, true, con);
+////					stream.Start();
+//                    VideoRenderer.Callbacks remoteRender2;
+//                    //remoteRender2 = VideoRendererGui.create(0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
+//
+//                    streamAudio = new StreamBBAudio(null);
+//                    streamAudio.setId(Integer.parseInt(langsIdmap.get(CommonUtils.getLastKnownLang(JanusActivity.this))));
+//                    streamAudio.initializeMediaContext(JanusActivity.this, true, false, true, con);
+//                    streamAudio.Start();
+//                    SharedPreferences.Editor ed = shared.edit();
+//                    ed.putBoolean("isPlaying", true);
+//                    ed.commit();
+//
+//                }
+//            }
+//        });
+//
+//        playDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//            @Override
+//            public void onCancel(DialogInterface dialogInterface) {
+//                SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(JanusActivity.this);
+//                if (shared.getBoolean("isPlaying", true)) {
+//                    but.setImageResource(R.drawable.mediacontroller_play01);
+//
+//                    //stop the player
+////					stream = new StreamBBVideo(remoteRender1);
+////					stream.initializeMediaContext(this, true, true, true, con);
+////					stream.Start();
+//
+//                    VideoRenderer.Callbacks remoteRender2;
+//                    //remoteRender2 = VideoRendererGui.create(0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
+//
+//                    if (streamAudio != null) {
+//                        try {
+//                            SharedPreferences.Editor ed = shared.edit();
+//                            ed.putBoolean("isPlaying", false);
+//                            ed.commit();
+//                            streamAudio.stop();
+//
+//                        } catch (Exception e) {
+//
+//                        }
+//                    }
+//
+//                }
+//            }
+//        });
+//        playDialog.show();
 
 //        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 //// Create NotificationManager.
@@ -441,109 +437,9 @@ public class JanusActivity extends FragmentActivity {
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
+
         super.onResume();
-        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(JanusActivity.this);
-        if (shared.getBoolean("isPlaying", false) && (playDialog==null || !playDialog.isShowing()))
-        {
-            playDialog = new Dialog(this);
-            playDialog.setTitle("Playing audio");
-            playDialog.setContentView(R.layout.mediacontroller);
-            final ImageButton but = (ImageButton) playDialog.findViewById(R.id.mediacontroller_play_pause);
-
-            but.setImageResource(R.drawable.mediacontroller_pause01);
-            but.setOnClickListener(new View.OnClickListener() {
-
-
-                @Override
-                public void onClick(View v) {
-                    // TODO Auto-generated method stub
-                    EGLContext con = VideoRendererGui.getEGLContext();
-                    SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(JanusActivity.this);
-
-
-                    //String location = shared.getString("audiourl", "http://icecast.kab.tv/heb.mp3");
-                    if (shared.getBoolean("isPlaying", true)) {
-                        but.setImageResource(R.drawable.mediacontroller_play01);
-
-                        //stop the player
-//					stream = new StreamBBVideo(remoteRender1);
-//					stream.initializeMediaContext(this, true, true, true, con);
-//					stream.Start();
-
-                        VideoRenderer.Callbacks remoteRender2;
-                        //remoteRender2 = VideoRendererGui.create(0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
-
-                        if (streamAudio != null) {
-                            try {
-                                SharedPreferences.Editor ed = shared.edit();
-                                ed.putBoolean("isPlaying", false);
-                                ed.commit();
-                                streamAudio.stop();
-
-                            } catch (Exception e) {
-
-                            }
-                        }
-
-                    } else
-
-                    {
-                        but.setImageResource(R.drawable.mediacontroller_pause01);
-//									svc=new Intent(StreamListActivity.this, AudioPlayerFactory.GetAudioPlayer(StreamListActivity.this).getClass());
-
-                        //start player
-//					 stream = new StreamBBVideo(remoteRender1);
-//					stream.initializeMediaContext(this, true, true, true, con);
-//					stream.Start();
-                        VideoRenderer.Callbacks remoteRender2;
-                        //remoteRender2 = VideoRendererGui.create(0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
-
-                        streamAudio = new StreamBBAudio(null);
-                        streamAudio.setId(Integer.parseInt(langsIdmap.get(CommonUtils.getLastKnownLang(JanusActivity.this))));
-                        streamAudio.initializeMediaContext(JanusActivity.this, true, false, true, con);
-                        streamAudio.Start();
-                        SharedPreferences.Editor ed = shared.edit();
-                        ed.putBoolean("isPlaying", true);
-                        ed.commit();
-
-                    }
-                }
-            });
-
-            playDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialogInterface) {
-                    SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(JanusActivity.this);
-                    if (shared.getBoolean("isPlaying", true)) {
-                        but.setImageResource(R.drawable.mediacontroller_play01);
-
-                        //stop the player
-//					stream = new StreamBBVideo(remoteRender1);
-//					stream.initializeMediaContext(this, true, true, true, con);
-//					stream.Start();
-
-                        VideoRenderer.Callbacks remoteRender2;
-                        //remoteRender2 = VideoRendererGui.create(0, 0, 25, 25, VideoRendererGui.ScalingType.SCALE_ASPECT_FIT, false);
-
-                        if (streamAudio != null) {
-                            try {
-                                SharedPreferences.Editor ed = shared.edit();
-                                ed.putBoolean("isPlaying", false);
-                                ed.commit();
-                                streamAudio.stop();
-
-                            } catch (Exception e) {
-
-                            }
-                        }
-
-                    }
-                }
-            });
-            playDialog.show();
-        }
     }
 
     public enum state{

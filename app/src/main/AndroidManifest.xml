@@ -2,7 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="computician.janusclient">
 
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+    <!-- &lt;!&ndash;android.hardware.bluetooth&ndash;&gt; need to add as features -->
+    <!-- android.hardware.camera -->
+    <!-- android.hardware.microphone -->
+    <!-- android.hardware.faketouch -->
+    <!-- android.hardware.screen.portrait -->
+
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -11,7 +17,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:icon="@mipmap/ic_launcher"
@@ -47,8 +53,13 @@
         <service
             android:name=".JanusPlayer"
             android:enabled="true"
-            android:exported="true"></service>
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
+            android:exported="true" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <activity android:name=".AudioControlActivity"></activity>
     </application>
 
 </manifest>
