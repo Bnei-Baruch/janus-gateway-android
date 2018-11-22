@@ -34,7 +34,7 @@ import java.util.Map;
 public class CommonUtils {
 
 	
-	public final static ArrayList<String> languages = new ArrayList<String>(Arrays.asList("English","Español","Français","Pycckий","Italiano","Duetsch","עברית"));
+	public final static ArrayList<String> languages = new ArrayList<String>(Arrays.asList("English","Español","Français","Pycckий","Italiano","Deutsch","עברית"));
 	public final static ArrayList<String> langs = new ArrayList<String>(Arrays.asList("eng","spa","fre","rus","ita","ger","heb"));
 	 
 	public static int FROM_WIDGET = 10;
