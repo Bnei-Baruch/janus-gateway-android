@@ -32,7 +32,7 @@ public class StreamBBAudio {
 //  private final String JANUS_URI = "http://itgb.net:8088/janus";
     //private final String JANUS_URI = "http://jnseur.kbb1.com:8088/janus";
 
-    private final String JANUS_URI = "https://v4g.kbb1.com/janusios";
+    private final String JANUS_URI = "https://stream.kli.one/janustrl";
     //private final String JANUS_URI = " http://v4g.kbb1.com:8088/janus";
 
     //private final String JANUS_URI = "http://188.165.249.44:8088/janus";
