@@ -10,9 +10,9 @@ android {
         applicationId "computician.janusclient"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 7
+        versionCode 8
 
-        versionName "1.01.41"
+        versionName "1.01.42"
     }
 
     buildTypes {
